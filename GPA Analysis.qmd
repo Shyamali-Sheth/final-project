@@ -1,0 +1,50 @@
+---
+title: "GPA Analysis"
+author: "Shyamali Sheth"
+format: html
+execute: 
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+
+library(tidyverse)
+library(brms)
+library(dplyr)
+```
+
+```{r}
+#| label: loaddata
+#| warning: false
+#| message: false
+
+data <- read_csv("data/studentData.csv")
+```
+
+```{r}
+#| label: models
+#| warning: false
+#| cache: true
+
+# Define the formula for the model
+formula <- bf(GPA ~ Age + StudyTimeWeekly + Absences + ParentalSupport + Tutoring)
+
+# Fit the model using brms
+model <- brm(
+  formula = formula,
+  data = data,
+  family = gaussian(),
+  silent = 2,
+  refresh = 0,
+  seed = 76)
+  
+fixef(model)
+pp_check(model)
+
+
+```
+
